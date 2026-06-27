@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will you be mine?</title>
+    <style>
+        /* CSS: Styling the application with a Pink/White theme */
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* Soft white to pale pink gradient */
+            background: linear-gradient(180deg, #DB7093 0%, #FFB6C1 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            overflow: hidden; /* Prevents scrollbars when button moves */
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px; 
+            width: 90%;
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.15);
+            z-index: 1;
+        }
+
+        img {
+            width: 320px;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 25px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transition: opacity 0.5s ease-in-out;
+            border: 5px solid white;
+        }
+
+        #message {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #ff758c;
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+            min-height: 70px;
+            align-items: center;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        #yes-btn {
+            background-color: #ff758c;
+            color: white;
+        }
+
+        #yes-btn:hover {
+            background-color: #ff4d6d;
+            transform: scale(1.1);
+        }
+
+        #no-btn {
+            background-color: #ffffff;
+            color: #ff758c;
+            border: 2px solid #ff758c;
+            position: relative;
+        }
+
+        .confetti {
+            position: absolute;
+            font-size: 2.5rem;
+            animation: float 3s linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <img id="image" src="photo1.jpg" alt="Cute Image">
+        
+        <div id="message">Hey Mary, I think you're really nice, and I'd like to get to know you better?</div>
+        
+        <div class="buttons">
+            <button id="yes-btn">YES</button>
+            <button id="no-btn">NO</button>
+        </div>
+    </div>
+
+  <script>
+    // 5 images (0 to 4)
+    const images = [
+        "photo1.jpg", 
+        "photo2.jpg",
+        "photo3.jpg",
+        "photo4.jpg",
+        "photo5.jpg"
+    ];
+
+    // 5 texts (0 to 4)
+    const texts = [
+        "Hey Mary, I think you're really nice, and I'd like to get to know you better?",
+        "Are you sure you clicked \"NO\", I give you a second chance ?",
+        "Takidm  Panjat Bari Kawt ?",
+        "Are you sure ? That answer deserves a third thought",
+        "Kota Chance! 🩷"
+    ];
+
+    // THE IMAGE TO SHOW AFTER YES
+    const successImage = "final.jpg";
+
+    let index = 0;
+    const imgEl = document.getElementById('image');
+    const textEl = document.getElementById('message');
+    const yesBtn = document.getElementById('yes-btn');
+    const noBtn = document.getElementById('no-btn');
+
+    // NO button click handler
+    noBtn.addEventListener('click', (e) => {
+        e.preventDefault(); 
+        
+        if (index < images.length - 1) {
+            index++;
+            
+            // Move button to a random position
+            const x = Math.random() * (window.innerWidth - 150);
+            const y = Math.random() * (window.innerHeight - 150);
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+
+            // Update image and text
+            imgEl.style.opacity = 0;
+            setTimeout(() => {
+                imgEl.src = images[index];
+                textEl.innerText = texts[index];
+                imgEl.style.opacity = 1;
+            }, 250);
+        } else {
+            // This happens on the final NO click
+            textEl.innerText = "Chance u shti ka nama YES bka! 🩷";
+            noBtn.style.display = 'none';
+            yesBtn.style.transform = 'scale(1.5)';
+        }
+    });
+
+    // YES button click handler
+    yesBtn.addEventListener('click', (e) => {
+        e.preventDefault(); 
+        
+        imgEl.src = successImage; 
+        textEl.innerText = "Yay! I had a feeling you'd say YES. This flower is for you ❤️";
+        document.querySelector('.buttons').style.display = 'none';
+        
+        for (let i = 0; i < 30; i++) {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️‍🔥';
+            heart.className = 'confetti';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(heart);
+        }
+    });
+</script>
+</body>
+</html>
